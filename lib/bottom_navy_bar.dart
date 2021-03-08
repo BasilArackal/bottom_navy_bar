@@ -24,11 +24,11 @@ class BottomNavyBar extends StatelessWidget {
     @required this.onItemSelected,
     this.curve = Curves.linear,
   }) : assert(items != null),
-       assert(items.length >= 2 && items.length <= 5),
-       assert(onItemSelected != null),
-       assert(animationDuration != null),
-       assert(curve != null),
-       super(key: key);
+        assert(items.length >= 2 && items.length <= 5),
+        assert(onItemSelected != null),
+        assert(animationDuration != null),
+        assert(curve != null),
+        super(key: key);
 
   /// The selected item is index. Changing this property will change and animate
   /// the item being selected. Defaults to zero.
@@ -152,7 +152,7 @@ class _ItemWidget extends StatelessWidget {
         curve: curve,
         decoration: BoxDecoration(
           color:
-              isSelected ? item.activeColor.withOpacity(0.2) : backgroundColor,
+          isSelected ? item.activeColor : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(
@@ -162,36 +162,29 @@ class _ItemWidget extends StatelessWidget {
             width: isSelected ? 130 : 50,
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 IconTheme(
                   data: IconThemeData(
                     size: iconSize,
-                    color: isSelected
-                        ? item.activeColor.withOpacity(1)
-                        : item.inactiveColor == null
-                            ? item.activeColor
-                            : item.inactiveColor,
+                    color: isSelected ? Colors.white:Color(0xFF898B9A),
                   ),
                   child: item.icon,
                 ),
                 if (isSelected)
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
+                  Container(
+                      margin: EdgeInsets.only(left: 8),
                       child: DefaultTextStyle.merge(
                         style: TextStyle(
                           color: item.activeColor,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 1,
-                        textAlign: item.textAlign,
+                        textAlign: TextAlign.center,
                         child: item.title,
                       ),
                     ),
-                  ),
               ],
             ),
           ),
@@ -211,7 +204,7 @@ class BottomNavyBarItem {
     this.textAlign,
     this.inactiveColor,
   }) : assert(icon != null),
-       assert(title != null);
+        assert(title != null);
 
   /// Defines this item's icon which is placed in the right side of the [title].
   final Widget icon;
