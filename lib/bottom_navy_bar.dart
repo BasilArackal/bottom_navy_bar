@@ -9,7 +9,6 @@ import 'package:flutter/widgets.dart';
 /// Update [selectedIndex] to change the selected item.
 /// [selectedIndex] is required and must not be null.
 class BottomNavyBar extends StatelessWidget {
-
   BottomNavyBar({
     Key key,
     this.selectedIndex = 0,
@@ -23,7 +22,7 @@ class BottomNavyBar extends StatelessWidget {
     @required this.items,
     @required this.onItemSelected,
     this.curve = Curves.linear,
-  }) : assert(items != null),
+  })  : assert(items != null),
         assert(items.length >= 2 && items.length <= 5),
         assert(onItemSelected != null),
         assert(animationDuration != null),
@@ -151,8 +150,7 @@ class _ItemWidget extends StatelessWidget {
         duration: animationDuration,
         curve: curve,
         decoration: BoxDecoration(
-          color:
-          isSelected ? item.activeColor : backgroundColor,
+          color: isSelected ? item.activeColor : backgroundColor,
           borderRadius: BorderRadius.circular(itemCornerRadius),
         ),
         child: SingleChildScrollView(
@@ -165,26 +163,49 @@ class _ItemWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                IconTheme(
-                  data: IconThemeData(
-                    size: iconSize,
-                    color: isSelected ? Colors.white:Color(0xFF898B9A),
+                Stack(alignment: AlignmentDirectional.topEnd, children: [
+                  IconTheme(
+                    data: IconThemeData(
+                      size: iconSize,
+                      color: isSelected ? Colors.white : Color(0xFF898B9A),
+                    ),
+                    child: item.icon,
                   ),
-                  child: item.icon,
-                ),
-                if (isSelected)
-                  Container(
-                      margin: EdgeInsets.only(left: 8),
-                      child: DefaultTextStyle.merge(
-                        style: TextStyle(
-                          color: item.activeColor,
-                          fontWeight: FontWeight.bold,
+                  Visibility(
+                    visible: item.showBadge ?? false,
+                    child: Container(
+                      height: 13,
+                      width: 13,
+                      padding: EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: Color(0XFFC71712),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            (item.badgeCount ?? 0).toString(),
+                            style: badgeTextStyle,
+                          ),
                         ),
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        child: item.title,
                       ),
                     ),
+                  ),
+                ]),
+                if (isSelected)
+                  Container(
+                    margin: EdgeInsets.only(left: 8),
+                    child: DefaultTextStyle.merge(
+                      style: TextStyle(
+                        color: item.activeColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      textAlign: TextAlign.center,
+                      child: item.title,
+                    ),
+                  ),
               ],
             ),
           ),
@@ -196,14 +217,15 @@ class _ItemWidget extends StatelessWidget {
 
 /// The [BottomNavyBar.items] definition.
 class BottomNavyBarItem {
-
   BottomNavyBarItem({
     @required this.icon,
     @required this.title,
+    this.showBadge = false,
+    this.badgeCount,
     this.activeColor = Colors.blue,
     this.textAlign,
     this.inactiveColor,
-  }) : assert(icon != null),
+  })  : assert(icon != null),
         assert(title != null);
 
   /// Defines this item's icon which is placed in the right side of the [title].
@@ -223,5 +245,13 @@ class BottomNavyBarItem {
   ///
   /// This will take effect only if [title] it a [Text] widget.
   final TextAlign textAlign;
-
+  final bool showBadge;
+  final int badgeCount;
 }
+
+//styles
+var badgeTextStyle = TextStyle(
+  fontSize: 8,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+);
